@@ -1,12 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type=text/javascript src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+    <script type=text/javascript src="{{url_for('static',filename='js/popper.min.js')}}"></script>
+    <script type=text/javascript src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <link rel="icon" href="{{url_for('static',filename='icon/ic_poll_black_48dp.png')}}">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/font-awesome.min.css')}}">
+    <title>Object detector</title>
 </head>
-<body>
-    <img class="mb-3  center-block border-secondary card bg-secondary m-auto" src="{{ url_for('video_feed') }}" width="70%">
+<body class="bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Object detector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="row mt-2 mt-5 pt-3 container-fluid">
+        <div class="col-lg-5 col-md-12">
+            <div class="row justify-content-center align-items-center g-2">
+                <div class="col-12">
+                    <img class="center-block border-primary card bg-secondary m-auto" src="{{ url_for('video_feed') }}" width="65%">
+                </div>
+                <div class="text-center col-5">
+                    <div class="d-grid gap-2">
+                        <button type="button" name="" id="js-capture" class="btn btn btn-outline-primary"><li class ="fa fa-camera"></li> Capturer</button>
+                    </div>
+                </div>
+                <div id="chargement" class="row card border-primary text-center justify-content-center align-items-center p-5 mt-2" style="height: 16rem;width: 65%;">
+                    <div class="spinner-grow text-primary" role="status">
+                    </div>
+                </div>
+                <div class="col-12 text-center center-block " id="resultat">
+                    <img class="mb-3  center-block border-primary card bg-secondary m-auto" src="{{url_for('static',filename='img/result.jpg')}}" id="captured" alt=""  width="65%">
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row" style="height: 92%;">
+                <div class="col-12 card shadow-lg border-primary justify-content-start p-2 mx-2 mb-2" style="height: 10%;">
+                    <p  class="text-primary">
+                        <strong>Temps de calcul: </strong><a id="calcul_duration"></a>
+                    </p>
+                </div>
+                <div class="col-12 card shadow-lg border-primary mt-2 justify-content-start p-2 m-2" style="height: 20%;">
+                    <p  class="text-primary">
+                        <strong>Type d'objets trouvés: </strong><a id="objets_nb"></a>
+                    </p>
+                    <div id="types">
+
+                    </div>
+                </div>
+                <div class="col-12 card shadow-lg border-primary mt-2 justify-content-start p-2 m-2" style="height: 70%;">
+                    <p  class="text-primary">
+                        <strong>Details: </strong>
+                    </p>
+                    <div class="row">
+                        <div class="col-12" id="objets" >
+                            
+                        </div>
+                        <div class="col-12">
+                            <div class="table">
+                                <table class="table table-striped table-hover table-borderless align-middle" id="tbl-details">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nom</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbl">
+                                        <tr class="text-center">
+                                            <td colspan="3" >Aucune données</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+<script>
+    $().ready(function () {
+        $('#chargement').hide();
+        // Capture
+        $(document).on("click","#js-capture",function(){
+            let d_1 = new Date()
+            console.log('capture_'+d_1.getTime())
+            let url = "/detect";
+            $('#resultat').hide();
+            $('#chargement').show();
+            $.get(url,{},function(response){
+                console.log(response);
+                objets = JSON.parse(response)
+                types = ''
+                result =''
+                for (i = 0; i < objets.length; i++) {
+                    result += '<tr>'
+                    color_classes = ['success','primary','danger','warning','info','dark']
+                    color_class = color_classes[Math.floor(Math.random()*color_classes.length)]
+                    types += '<span class="badge mx-2 bg-'+color_class+'">'+objets[i].nom+'</span>'
+                    result += '<td>'+objets[i].nom+'</td>'
+                    result += '<td>'+objets[i].nombre+'</td>'
+                    result += '<td>'
+                    for (j=0;j < objets[i].items.length;j++){
+                        valeur_percent = parseFloat(objets[i].items[j].confidence*100)
+                        width = parseInt(objets[i].items[j].confidence*100)
+                        valeur = valeur_percent.toFixed(2)
+                        result += '<div class="row">'
+                        result += '<div class="row">'
+                        result += '<div class="col-3"><span class="badge bg-success">'+(j+1)+' </span></div>'
+                        result+='<div class="col-9">'
+                        result+='<div class="progress m-1">'
+                        result += '<div class="progress-bar progress-bar-animated bg-success" style="width:'+valeur+'%" role="progressbar" aria-valuenow="'+valeur+'" aria-valuemin="0" aria-valuemax="100">'+valeur+'%</div>'
+                        result +='</div>'
+                        result +='</div>'
+                        result += '</div>'
+                        result += '</div>'
+                    }
+                    result += '</td>'
+                    result += '</tr>'
+                }
+                if (objets.length<1){
+                    result += ' <tr class="text-center"><td colspan="3" >Aucune objets détecté</td></tr>'
+                }
+                $("#tbl").html(result)
+                console.log(objets)
+
+                target = '#captured';
+                let d_2 = new Date();
+                $('#resultat').show();
+                $('#chargement').hide();
+                $(target).attr('src',"{{url_for('static',filename='img/result.jpg')}}?"+d_2.getTime());
+
+                $("#objets_nb").text(objets.length)
+
+                $('#types').html(types)
+                
+                let diff = (d_2.getTime()-d_1.getTime())/1000;
+                $("#calcul_duration").text(diff+ ' secondes')
+                console.log('response_'+d_2.getTime())
+                function allObjects(item)
+                {
+                    if(item!='')
+                    text+='<div class="col-4"><div class="card bg-primary m-2 p-2 text-light">'+item+'</div></div>'
+                }
+            })
+        })//fin capture
+    })
+
+</script>
 </html>
