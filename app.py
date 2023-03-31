@@ -11,8 +11,8 @@ import logging
 import time
 from dotenv import dotenv_values,load_dotenv
 import json
+import argparse
 
-#coding: utf-8
 class Objet:
     def __init__(self,nom,confidence):
         self.nom = nom
@@ -24,6 +24,24 @@ class Objet:
 # logging.basicConfig(level=logging.DEBUG,
 # format = '[%(levelname)s](%(threadName)s)%(message)s',)
 
+source = 0
+debug = False
+ap = argparse.ArgumentParser()
+ap.add_argument('-s', '--source', required=False,
+                help = 'Selectionner la camera: 0 pour la camera du PC ,1 pour un webcam externe .On peur aussi entrer un adresse ip pour une camera ip')
+ap.add_argument('-d', '--debug', required=False,
+                help = 'Activer ou desactiver le mode debug')
+
+ap.add_argument('-H', '--host', required=False,
+                help = 'IP utilisé au lieu de localhost,par defaut :127.0.0.1')
+
+args = ap.parse_args()
+if args.source != None:
+    source = args.source
+if args.debug != None:
+    debug = args.debug
+
+# exit()
 # Initialisation Flask
 app = Flask(__name__)
 
@@ -43,7 +61,7 @@ engine.setProperty('voice',voix[0].id)
 # --------fin Configuration pyttsx3------------
 
 # Initialisation camera
-camera = cv2.VideoCapture(1)  # webcam PC => 0,webcam externe => 1
+camera = cv2.VideoCapture(source)  # webcam PC => 0,webcam externe => 1
 
 # Recuperations des classes
 classes = None
@@ -200,7 +218,7 @@ def detect_object():
         y = box[1]
         w = box[2]
         h = box[3]
-        # draw_prediction(frame, class_ids[i], confidences[i], round(x), round(y), round(x+w), round(y+h))
+
         draw_thread = Thread(target=draw_prediction(frame, class_ids[i], confidences[i], round(x), round(y), round(x+w), round(y+h)),name="DRAW")
         draw_thread.start()
 
@@ -228,9 +246,10 @@ def index():
 
 if __name__ == '__main__':
     # app.run(host='192.168.43.208',debug=True)
-    # bg_thread = Thread(target=bg_task)
-    # bg_thread.start()
-    # bg_thread.join()
     print('initialisation...')
-    app.run(debug=True)
+
+    if args.host != None:
+        app.run(host=args.host,debug=debug)
+    else:
+        app.run(debug=debug)
     # app.run()
