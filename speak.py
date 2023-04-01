@@ -39,8 +39,8 @@ while True:
         if(detection=='rien'):
             parler('je ne detecte aucun objets')
         else:
-            parler(detection)
-            # parler('je vois {}'.format(detection))
+            # parler(detection)
+            parler('je vois {}'.format(detection))
         fichier=open("static/data/objets.txt","w")
         fichier.write('')
         fichier.close

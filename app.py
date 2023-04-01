@@ -24,7 +24,7 @@ class Objet:
 # logging.basicConfig(level=logging.DEBUG,
 # format = '[%(levelname)s](%(threadName)s)%(message)s',)
 
-source = 0
+source = 1
 debug = False
 ap = argparse.ArgumentParser()
 ap.add_argument('-s', '--source', required=False,
@@ -192,16 +192,16 @@ def detect_object():
                     })
                 print(resultat)
     label = ''
-    for objet in resultat:
+    for key,objet in enumerate(resultat):
         nombre = objet['nombre']
         nom = objet['nom']
-        if(nom=='Personne'):
-            if(nombre==1):
-                nom='Une personne'
-        label += (str(nombre)if nombre>1 else '') + nom 
+        label += str(nombre) + ' ' + nom + ' '
         if(len(resultat)>1):
-            if(len(resultat)==2):
-                label+=' et '
+            print('key:{},len(resultat):{}'.format(key,len(resultat)))
+            if(key == len(resultat)-2):
+                label+='et '
+            else:
+                label+='. '
     print(resultat)
     print(len(resultat))
 

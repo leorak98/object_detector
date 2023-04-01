@@ -39,19 +39,19 @@
         <div class="col-lg-5 col-md-12">
             <div class="row justify-content-center align-items-center g-2">
                 <div class="col-12">
-                    <img class="center-block border-primary card bg-secondary m-auto" src="{{ url_for('video_feed') }}" width="65%">
+                    <img class="center-block shadow-lg border-primary card bg-secondary m-auto" src="{{ url_for('video_feed') }}" width="65%">
                 </div>
                 <div class="text-center col-5">
                     <div class="d-grid gap-2">
                         <button type="button" name="" id="js-capture" class="btn btn btn-outline-primary"><li class ="fa fa-camera"></li> Capturer</button>
                     </div>
                 </div>
-                <div id="chargement" class="row card border-primary text-center justify-content-center align-items-center p-5 mt-2" style="height: 16rem;width: 65%;">
+                <div id="chargement" class="row shadow-lg card border-primary text-center justify-content-center align-items-center p-5 mt-2" style="height: 16rem;width: 65%;">
                     <div class="spinner-grow text-primary" role="status">
                     </div>
                 </div>
                 <div class="col-12 text-center center-block " id="resultat">
-                    <img class="mb-3  center-block border-primary card bg-secondary m-auto" src="{{url_for('static',filename='img/result.jpg')}}" id="captured" alt=""  width="65%">
+                    <img class="mb-3 shadow-lg  center-block border-primary card bg-secondary m-auto" src="{{url_for('static',filename='img/result.jpg')}}" id="captured" alt=""  width="65%">
                 </div>
             </div>
         </div>
