@@ -11,7 +11,6 @@ import logging
 import time
 from dotenv import dotenv_values,load_dotenv
 import json
-import argparse
 
 class Objet:
     def __init__(self,nom,confidence):
@@ -26,20 +25,15 @@ class Objet:
 
 source = 0
 debug = False
-ap = argparse.ArgumentParser()
-ap.add_argument('-s', '--source', required=False,
-                help = 'Selectionner la camera: 0 pour la camera du PC ,1 pour un webcam externe .On peur aussi entrer un adresse ip pour une camera ip')
-ap.add_argument('-d', '--debug', required=False,
-                help = 'Activer ou desactiver le mode debug')
 
-ap.add_argument('-H', '--host', required=False,
-                help = 'IP utilisé au lieu de localhost,par defaut :127.0.0.1')
-
-args = ap.parse_args()
-if args.source != None:
-    source = args.source
-if args.debug != None:
-    debug = args.debug
+# Recuperation des variables
+if(load_dotenv()):
+    env = dotenv_values('.env')
+    local = env['LOCAL']
+    is_source_ip = int(env['IS_SOURCE_IP'])
+    source = int(env['SOURCE']) if is_source_ip == 0 else env['SOURCE']
+    debug = int(env['DEBUG'])
+    debug = (False) if (debug==0) else True
 
 # exit()
 # Initialisation Flask
@@ -84,29 +78,7 @@ def write(label,frame):
     fichier.write('rien'if label=='' else label)
     fichier.close
     cv2.imwrite("static/img/result.jpg", frame)
-
-def bg_task():
-    while True:
-        fichier=open("static/data/objets.txt","r")
-        detection=fichier.read()
-        if (detection!=''):
-            if(detection=='rien'):
-                parler('je ne detecte aucun objets')
-            else:
-                parler('je vois {}'.format(detection))
-            fichier=open("static/data/objets.txt","w")
-            fichier.write('')
-            fichier.close
-
-# Fonction parler
-def parler(text):
-    logging.debug('Starting')
-    engine.say(text)
-    engine.runAndWait()
-    # time.sleep(2)
-    engine.stop()
-
-
+    
 def get_output_layers(net):
     
     layer_names = net.getLayerNames()
@@ -197,13 +169,13 @@ def detect_object():
         nom = objet['nom']
         label +=( str(nombre) + ' ' + nom + ' ') if (nombre<2) else 'environ' + str(nombre) + ' ' + nom + ' '
         if(len(resultat)>1):
-            print('key:{},len(resultat):{}'.format(key,len(resultat)))
+            # print('key:{},len(resultat):{}'.format(key,len(resultat)))
             if(key == len(resultat)-2):
                 label+='et '
             else:
                 label+='. '
-    print(resultat)
-    print(len(resultat))
+    # print(resultat)
+    # print(len(resultat))
 
     indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
     
@@ -245,11 +217,15 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    # app.run(host='192.168.43.208',debug=True)
+
     print('initialisation...')
 
-    if args.host != None:
-        app.run(host=args.host,debug=debug)
+    print('local:{}'.format(local))
+    print('source:{}'.format(source))
+    print('host:{}'.format(env['HOST']))
+    print('debug:{}'.format(debug))
+
+    if env['HOST'] != None:
+        app.run(env['HOST'],debug=debug)
     else:
         app.run(debug=debug)
-    # app.run()

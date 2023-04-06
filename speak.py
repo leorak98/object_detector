@@ -1,6 +1,7 @@
 import pyttsx3
 from threading import Thread
 from dotenv import dotenv_values,load_dotenv
+import time
 
 local = 'fr'
 if(load_dotenv()):
@@ -29,17 +30,17 @@ engine.setProperty('voice',voix[voice].id)
 def parler(text):
     engine.say(text)
     engine.runAndWait()
-    # time.sleep(2)
     engine.stop()
-
+print('initialisation ...')
+time.sleep(2)
+print('initialisation terminée ...')
 while True:
     fichier=open("static/data/objets.txt","r")
     detection=fichier.read()
     if (detection!=''):
         if(detection=='rien'):
-            parler('je ne detecte aucun objets')
+            parler('je ne detecte aucune objets')
         else:
-            # parler(detection)
             parler('je vois {}'.format(detection))
         fichier=open("static/data/objets.txt","w")
         fichier.write('')
