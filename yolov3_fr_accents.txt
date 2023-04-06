@@ -1,5 +1,5 @@
 Personne
-velo
+vélo
 voiture
 moto
 avion
@@ -10,7 +10,7 @@ bateau
 feu de circulation
 bouche d'incendie
 panneau d'arrêt
-parcometre
+parcomètre
 banc
 oiseau
 chat
@@ -18,13 +18,13 @@ chien
 cheval
 mouton
 vache
-elephant
+éléphant
 ours
-zebre
+zèbre
 girafe
-sac a dos
+sac à dos
 parapluie
-sac a main
+sac à main
 cravate
 valise
 frisbee
@@ -34,15 +34,15 @@ ballon de sport
 cerf-volant
 batte de baseball
 gant de baseball
-planche a roulettes
+planche à roulettes
 planche de surf
 raquette de tennis
 bouteille
-verre a vin
+verre à vin
 tasse
 fourchette
 couteau
-cuillere
+cuillère
 bol 
 banane
 pomme
@@ -55,26 +55,26 @@ pizza
 beignet
 gâteau
 chaise
-canape
+canapé
 plante en pot
 lit
-table a manger
+table à manger
 toilettes
-television
+télévision
 ordinateur portable
 souris
-telecommande
+télécommande
 clavier
-telephone portable
+téléphone portable
 micro-ondes 
 four
 grille-pain
-evier
-refrigerateur
+évier
+réfrigérateur
 livre
 horloge
 vase
 ciseaux
 ours en peluche
-seche-cheveux
-brosse a dents
+sèche-cheveux
+brosse à dents
