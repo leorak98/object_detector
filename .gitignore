@@ -2,4 +2,5 @@ source/
 object_detector/
 Tuto/
 yolov3.weights
-.env
+# .env
+static/data/objets.txt
