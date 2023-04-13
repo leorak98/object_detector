@@ -23,3 +23,10 @@ deactivate
     python speak.py
     ```
 3. Ouvrir un navigateur et aller à l'adresse [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+
+## Utilisation
+### Capture:
+Il existe deux façon pour capturer et detecter des objets:
+1. Cliquer le bouton `Capturer` sur l'ecran
+2. Cliquer sur des boutons sur le clavier: `Espace` ou `Entrer` ou `C`

@@ -13,4 +13,3 @@ python-dotenv
 pyttsx3==2.90
 pywin32==300
 Werkzeug==2.0.1
-argparse
