@@ -41,7 +41,7 @@ while True:
         if(detection=='rien'):
             parler('je ne detecte aucune objets')
         else:
-            parler('je vois {}'.format(detection))
+            parler('je vois environ {}'.format(detection))
         fichier=open("static/data/objets.txt","w")
         fichier.write('')
         fichier.close

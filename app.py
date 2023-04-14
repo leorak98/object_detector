@@ -167,7 +167,8 @@ def detect_object():
     for key,objet in enumerate(resultat):
         nombre = objet['nombre']
         nom = objet['nom']
-        label +=( str(nombre) + ' ' + nom + ' ') if (nombre<2) else 'environ' + str(nombre) + ' ' + nom + ' '
+        # label +=( str(nombre) + ' ' + nom + ' ') if (nombre<2) else 'environ' + str(nombre) + ' ' + nom + ' '
+        label +=( str(nombre) + ' ' + nom + ' ')
         if(len(resultat)>1):
             # print('key:{},len(resultat):{}'.format(key,len(resultat)))
             if(key == len(resultat)-2):
