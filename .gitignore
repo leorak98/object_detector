@@ -4,3 +4,4 @@ Tuto/
 yolov3.weights
 # .env
 static/data/objets.txt
+/node_modules
