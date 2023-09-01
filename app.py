@@ -26,9 +26,6 @@ class Objet:
 source = 0
 debug = False
 
-# Index des objets qu'on veut detecter
-objets_autorise = [0,42,67,46] # => personne,fourcette,banane,telephone portable
-
 # Recuperation des variables
 if(load_dotenv()):
     env = dotenv_values('.env')
@@ -138,35 +135,34 @@ def detect_object():
             scores = detection[5:]
             class_id = np.argmax(scores)
             confidence = scores[class_id]
-            if class_id in objets_autorise:
-                if confidence > 0.5:
-                    center_x = int(detection[0] * Width)
-                    center_y = int(detection[1] * Height)
-                    w = int(detection[2] * Width)
-                    h = int(detection[3] * Height)
-                    x = center_x - w / 2
-                    y = center_y - h / 2
-                    class_ids.append(class_id)
-                    confidences.append(float(confidence))
-                    boxes.append([x, y, w, h])
+            if confidence > 0.5:
+                center_x = int(detection[0] * Width)
+                center_y = int(detection[1] * Height)
+                w = int(detection[2] * Width)
+                h = int(detection[3] * Height)
+                x = center_x - w / 2
+                y = center_y - h / 2
+                class_ids.append(class_id)
+                confidences.append(float(confidence))
+                boxes.append([x, y, w, h])
 
-                    objet = Objet(classes[class_id],confidence)
+                objet = Objet(classes[class_id],confidence)
 
-                    objet_existant = False
-                    for obj in resultat:
-                        if obj['nom']==objet.nom:
-                            obj['nombre'] += 1
-                            obj['items'].append({'confidence':objet.confidence})
-                            objet_existant = True
-                            break
+                objet_existant = False
+                for obj in resultat:
+                    if obj['nom']==objet.nom:
+                        obj['nombre'] += 1
+                        obj['items'].append({'confidence':objet.confidence})
+                        objet_existant = True
+                        break
 
-                    if not objet_existant:
-                        resultat.append({
-                            'nom':objet.nom,
-                            'nombre':1,
-                            'items':[{'confidence':objet.confidence}]
-                        })
-                    print(resultat)
+                if not objet_existant:
+                    resultat.append({
+                        'nom':objet.nom,
+                        'nombre':1,
+                        'items':[{'confidence':objet.confidence}]
+                    })
+                print(resultat)
     label = ''
     for key,objet in enumerate(resultat):
         nombre = objet['nombre']
